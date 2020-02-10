@@ -42,11 +42,8 @@ async def offer(request):
     log_info("Created for %s", request.remote)
 
     # prepare local media
-    player = MediaPlayer(os.path.join(ROOT, "demo-instruct.wav"))
-    if args.write_audio:
-        recorder = MediaRecorder(args.write_audio)
-    else:
-        recorder = MediaBlackhole()
+    player = MediaPlayer("alsa_input.pci-0000_00_1f.3.analog-stereo", format="pulse")
+    recorder = MediaRecorder("alsa_output.pci-0000_00_1f.3.analog-stereo", format="pulse")
 
     @pc.on("datachannel")
     def on_datachannel(channel):
@@ -115,7 +112,9 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
-
+    logging.getLogger("rtp").setLevel(logging.INFO)
+    logging.getLogger("ice").setLevel(logging.INFO)
+    logging.getLogger("sctp").setLevel(logging.INFO)
     if args.cert_file:
         ssl_context = ssl.SSLContext()
         ssl_context.load_cert_chain(args.cert_file, args.key_file)
