@@ -13,6 +13,8 @@ Mostly based on the sendrecv demo in https://github.com/centricular/gstwebrtc-de
 
 In three separate tabs, run consecutively:
 
+```console
 $ ./generate_cert.sh
 $ ./control-server.py
-$ ./https-server.py
+$ ./https-server.py --cert-file cert.pem --key-file key.pem --port 8000
+```
